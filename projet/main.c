@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//SCREENSAVER STATIQUE STRUCTURES ET PROTOTYPES
+//LAUNCHER EXIASAVER STRUCTURES ET FONCTIONS
 
+//Structure associating a number for each different screenSaver
+typedef struct screenSaver screenSaver {
+
+    int statique = 1;
+    int dynamique = 2;
+    int interactif = 3;
+
+};
 
 //Structure associating a number for each PBM file
 typedef struct PBM PBM {
@@ -13,6 +21,12 @@ typedef struct PBM PBM {
     int poulet = 3;
 
 };
+
+//Random choice between the different PBM files numbers
+int aleaStruct(struct);
+
+
+//SCREENSAVER STATIQUE STRUCTURES ET PROTOTYPES
 
 //Linked list containing the PBM's bytes
 typedef struct bytes bytes{
@@ -27,9 +41,6 @@ struct llist {
 
 
 };
-
-//Random choice between the different PBM files numbers
-int aleaStruct_PBM (*PBM);
 
 //Open the PBM file
 *FILE ouverture(int image);
