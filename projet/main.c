@@ -4,7 +4,8 @@
 //LAUNCHER EXIASAVER STRUCTURES ET FONCTIONS
 
 //Structure associating a number for each different screenSaver
-typedef struct screenSaver screenSaver {
+typedef struct screenSaver screenSaver;
+struct screenSaver{
 
     int statique = 1;
     int dynamique = 2;
@@ -24,6 +25,13 @@ typedef struct PBM PBM {
 
 //Random choice between the different PBM files numbers
 int aleaStruct(struct);
+
+//Open fichier history.txt
+FILE openHistory(char path);
+
+//Save informations about screenSaver launched into history.txt
+FILE addInfo(FILE*, int time, int date, int type);
+
 
 
 //SCREENSAVER STATIQUE STRUCTURES ET PROTOTYPES
