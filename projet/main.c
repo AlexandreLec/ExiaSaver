@@ -102,7 +102,7 @@ void affichage(*tabConsole);
 
 
 
-//saver dynamique
+//SCREENSAVER DYNAMIQUE STRUCTURES ET PROTOTYPES
 
  int tabConsole[80][23];
 
@@ -126,23 +126,26 @@ typedef struct taillesChiffres taillesChiffres{// size of number ex: 5X3 7x4
 
 }
 
-int **tabChiffres;// dynamic tab
+//Dynamic tab that store the PPM's bytes
+int **tabChiffres;
 
 tabchiffres= malloc(x*(sizeof (*ptr)));
 tabChiffres[i]= malloc(y * (sizeof(**ptr)));
 
+//Read the time and store it into a string char
+char readTime ();
 
-
-
+//Load a number
 void charge(*chiffres);
 
+//Complete the PPM's bytes in tabChiffres
 void remplissageTab(chiffres , *tabChiffres);
 
+//Complete the tabConsole with tabChiffres
 void remplissageTabConsole(*tabChiffre , *tabConsole);
 
+//Print the time
 void affichage (*tabConsole);
-
-char readTime ();
 
 
 
