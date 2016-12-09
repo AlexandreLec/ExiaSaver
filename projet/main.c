@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//SCREENSAVER STATIQUE STRUCTURES ET PROTOTYPES
 
-struct PBM {
+
+//Structure associating a number for each PBM file
+typedef struct PBM PBM {
 
     int chateau = 0;
     int exia = 1;
@@ -11,7 +14,8 @@ struct PBM {
 
 };
 
-struct bytes {
+//Linked list containing the PBM's bytes
+typedef struct bytes bytes{
 
     int byte;
     struct bytes *nxt;
@@ -24,13 +28,20 @@ struct llist {
 
 };
 
-int aleaStruct_PBM (*struct PBM);
+//Random choice between the different PBM files numbers
+int aleaStruct_PBM (*PBM);
+
+//Open the PBM file
 *FILE ouverture(int image);
+
+//Put the PBM's bytes in the linked list
 llist remplissage (*FILE);
-void affichage (llist);
+
+//Print the linked list centered on the screen
+void affichage (*llist);
 
 
-
+//SCREENSAVER INTERACTIF STRUCTURES ET PROTOTYPES
 
 typedef struct image image {
 
@@ -39,12 +50,16 @@ typedef struct image image {
    *FILE avion_G;
    *FILE avion_D;
 }
-typedef struct avionLoc avionLoc{//sauvegarde de la position précèdente
+
+//save previous and actual plane position
+typedef struct avionLoc avionLoc{
 
     char actual;
     char next ;
 
 }
+
+//Coordinates for each part of the plane
 typedef struct coordoAvion coordoAvion{
 
     int A1;
@@ -55,12 +70,22 @@ typedef struct coordoAvion coordoAvion{
 
 }
 
+//Static tab who cover all the console
 int tabConsole [80][23];
 
-image chargeImage(image);
-coordoAvion remplissageAvion(image , *coordoAvion );
+//Charge path image and save it in the structure image
+image chargeImage(*image, path_image);
+
+//Complete the plane coordinate structure with the bytes of the PBM file
+coordoAvion remplissageAvion(image , *coordoAvion);
+
+//Complete the static tab with the coordinate plane structure
 void remplissageTAB(*coordoAvion , *tabConsole);
-int deplacement(*avionLoc , *coordoAvion);
+
+//Change the coordinates of the planes for move it
+int deplacement(*avionLoc, *coordoAvion);
+
+//Print to the screen tabConsole containing the plane
 void affichage(*tabConsole);
 
 
