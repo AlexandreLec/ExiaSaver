@@ -101,3 +101,51 @@ void affichage(*tabConsole);
 
 
 
+
+//saver dynamique
+
+ int tabConsole[80][23];
+
+typedef struct chiffres chiffres {//struct with pointer on number file
+
+    *FILE chiffer_un;
+    *FILE chiffer_deux;
+    *FILE chiffer_trois;
+    *FILE chiffer_quatre;
+    *FILE chiffer_cinq;
+    *FILE chiffer_six;
+    *FILE chiffer_sept;
+    *FILE chiffer_huit;
+    *FILE chiffer_neuf;
+};
+
+typedef struct taillesChiffres taillesChiffres{// size of number ex: 5X3 7x4
+
+    int x;
+    int y;
+
+}
+
+int **tabChiffres;// dynamic tab
+
+tabchiffres= malloc(x*(sizeof (*ptr)));
+tabChiffres[i]= malloc(y * (sizeof(**ptr)));
+
+
+
+
+void charge(*chiffres);
+
+void remplissageTab(chiffres , *tabChiffres);
+
+void remplissageTabConsole(*tabChiffre , *tabConsole);
+
+void affichage (*tabConsole);
+
+char readTime ();
+
+
+
+
+
+
