@@ -3,13 +3,20 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
+
+#define W_CONSOLE 80
+#define H_CONSOLE 24
+
+void affichage(char *l, size_t wei, size_t hei);
+
 
 int main(int argc, char *argv[])
 {
 
 	FILE* dessin = NULL;
-	int caractereLu;
-	int line = 0;
+	char line[W_CONSOLE];
+	int lineNb = 1;
 	
 	system("clear");
 
@@ -24,26 +31,16 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			while((caractereLu = fgetc(dessin)) != EOF)
+			while((fgets(line, sizeof line, dessin)) != NULL)
 			{
 					
-				if(line > 9){
-					switch(caractereLu)
-					{
-						case 48:
-							printf(" ");
-							break;
-						case 10:
-							printf("\n");
-							break;
-						case 49:
-							printf("X");
-							break;
-					}
+				if(lineNb > 2){
+					
+					affichage(line, W_CONSOLE);
+					printf("\n");
+					
 				}
-				else{
-					line++;
-				}
+				lineNb++;
 			}
 		}
 	}
@@ -53,5 +50,36 @@ int main(int argc, char *argv[])
 	}
 	
 	fclose(dessin);
+	
 	return 0;
+}
+
+void affichage(char *l, size_t wei)
+{
+	size_t lenght = strlen(l);
+	
+	if(wei >= lenght)
+	{
+		size_t n = (wei - lenght)/2;
+		
+		for(size_t i=0; i<n;i++)
+		{
+			printf(" ");
+		}
+	}
+	for(int y=0; y<=lenght; y++)
+	{
+		int c = l[y];
+		switch (c)
+		{
+			case 48:
+				printf(" ");
+				break;
+				
+			case 49:
+				printf("X");
+				break;
+		}
+	}
+	
 }
