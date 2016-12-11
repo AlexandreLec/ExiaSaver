@@ -4,44 +4,68 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/wait.h>
 
+//Size of the console 24 lines 80 columns
 #define W_CONSOLE 80
 #define H_CONSOLE 24
 
-void affichage(char *l, size_t wei, size_t hei);
+//Functions prototypes
+void printHorizontal(char *l, size_t wei);
+void sizeImg(char *l, int *h, int *w);
+void center(int hMax, int *h);
+FILE* chargeImg(FILE *descriptor, char *path, char *mode);
 
 
 int main(int argc, char *argv[])
 {
-
+	//Descriptor file
 	FILE* dessin = NULL;
-	char line[W_CONSOLE];
-	int lineNb = 1;
 	
-	system("clear");
+	//Tab for bytes's line
+	char line[W_CONSOLE];	
+	
+	//Number of lines in the file
+	int lineNb = 1;
+	//Image height	 
+	int hei = 0;
+	//Image weight
+	int wei = 0;
+	//Pointers on image size
+	int *phei = &hei;
+	int *pwei = &wei;
 
 	if (argc == 2)
 	{
-
-		dessin = fopen(argv[1], "r");
+		//Remove all print on the console
+		system("clear");
+		
+		dessin = chargeImg(dessin, argv[1], "r");
 
 		if(dessin==NULL)
 		{
-			printf("Ouverture impossible");
+			printf("Opening failed");
 		}
 		else
 		{
+			//Reading the PBM file line per line and print it in the console
 			while((fgets(line, sizeof line, dessin)) != NULL)
 			{
+				//
+				if(lineNb == 2)
+				{
+					sizeImg(line, phei, pwei);
+					center(H_CONSOLE, phei);
+				}
 					
 				if(lineNb > 2){
 					
-					affichage(line, W_CONSOLE);
-					printf("\n");
-					
+					printHorizontal(line, W_CONSOLE);
+					printf("\n");	
 				}
 				lineNb++;
 			}
+			center(H_CONSOLE, phei);
 		}
 	}
 	else
@@ -51,10 +75,52 @@ int main(int argc, char *argv[])
 	
 	fclose(dessin);
 	
+	system("stty cbreak -echo");
+	getchar();
+	system("stty cooked echo");
+	system("clear");
+	
 	return 0;
 }
 
-void affichage(char *l, size_t wei)
+FILE* chargeImg(FILE *descriptor, char *path, char *mode)
+{
+	int pid;
+	
+	pid = fork();
+	
+	switch(pid)
+	{
+		case -1:
+			printf("Processus creation failed");
+			break;
+		
+		case 0:
+			descriptor = fopen(path, mode);
+			break;
+		default:
+			wait(NULL);
+			break;
+			
+	}
+	
+	return descriptor;
+}
+
+void sizeImg(char *l, int *h, int *w)
+{
+	char *tmp;
+	
+	tmp = strtok(l, " ");
+	
+	*w = atoi(tmp);
+	
+	tmp = strtok(NULL, " ");
+	
+	*h = atoi(tmp);
+}
+
+void printHorizontal(char *l, size_t wei)
 {
 	size_t lenght = strlen(l);
 	
@@ -80,6 +146,23 @@ void affichage(char *l, size_t wei)
 				printf("X");
 				break;
 		}
+	}
+}
+
+void center(int hMax, int *h) 
+{
+	if(hMax >= *h)
+	{
+		int n = (hMax - *h)/2;
+		
+		for(int i=0; i<n; i++)
+		{
+			printf("\n");
+		}
+	}
+	else
+	{
+		printf("Image trop grande");
 	}
 	
 }
