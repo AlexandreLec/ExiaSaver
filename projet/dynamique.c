@@ -36,8 +36,6 @@ int main (int argc, char *argv[])
         int *phei = &hei;
         int *pwei = &wei;
 
-        if (temps == 10)
-        {
         system("clear"); //clean
 
         int i;
@@ -63,6 +61,7 @@ int main (int argc, char *argv[])
 
 
                 int qq = strlen(tabdate);
+                
                 for (j=1; j < qq; j++)
                 {
                         if (tabdate[j] = '\n')
@@ -85,10 +84,7 @@ int main (int argc, char *argv[])
                         lineNb++;
                 }
 
-
         }
-        }
-        temps=0 ;
         fclose(dessin);
         
         
