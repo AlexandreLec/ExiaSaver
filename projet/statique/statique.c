@@ -42,38 +42,32 @@ int main(int argc, char *argv[])
 		
 		dessin = chargeImg(dessin, argv[1], "r");
 
-		if(dessin==NULL)
+		//Reading the PBM file line per line and print it in the console
+
+		while((fgets(line, sizeof line, dessin)) != NULL)
 		{
-			printf("Opening failed");
-		}
-		else
-		{
-			//Reading the PBM file line per line and print it in the console
-			while((fgets(line, sizeof line, dessin)) != NULL)
+			//
+			if(lineNb == 2)
 			{
-				//
-				if(lineNb == 2)
-				{
-					sizeImg(line, phei, pwei);
-					center(H_CONSOLE, phei);
-				}
-					
-				if(lineNb > 2){
-					
-					printHorizontal(line, W_CONSOLE);
-					printf("\n");	
-				}
-				lineNb++;
+				sizeImg(line, phei, pwei);
+				center(H_CONSOLE, phei);
 			}
-			center(H_CONSOLE, phei);
+				
+			if(lineNb > 2){
+				
+				printHorizontal(line, W_CONSOLE);
+				printf("\n");	
+			}
+			lineNb++;
 		}
+		center(H_CONSOLE, phei);
+		fclose(dessin);
+		
 	}
 	else
 	{
 		printf("Erreur d'argument");
 	}
-	
-	fclose(dessin);
 	
 	system("stty cbreak -echo");
 	getchar();
@@ -98,13 +92,21 @@ FILE* chargeImg(FILE *descriptor, char *path, char *mode)
 		case 0:
 			descriptor = fopen(path, mode);
 			break;
+			
 		default:
 			wait(NULL);
 			break;
 			
 	}
-	
-	return descriptor;
+				
+	if(descriptor==NULL)
+	{
+		printf("Opening failed");
+	}
+	else
+	{
+		return descriptor;
+	}
 }
 
 void sizeImg(char *l, int *h, int *w)
@@ -135,15 +137,16 @@ void printHorizontal(char *l, size_t wei)
 	}
 	for(int y=0; y<=lenght; y++)
 	{
-		int c = l[y];
-		switch (c)
+		switch (l[y])
 		{
 			case 48:
 				printf(" ");
 				break;
 				
 			case 49:
-				printf("X");
+				printf("%c", 219);
+				break;
+			default:
 				break;
 		}
 	}
