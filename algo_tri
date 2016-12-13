@@ -1,0 +1,39 @@
+int max(type tableau[], int tailleTableau)
+{
+    //Recherche la plus grande valeur du tableau
+    int i = 0;
+    int indice_max = 0;
+
+    while(i < tailleTableau) //parcours tout le tableau
+    {
+        if(tableau[i].point > tableau[indice_max].point)
+        {
+            indice_max = i; //Si la valeur rencontrée est plus grande que le maximum, elle devient le max
+        }
+        i++;
+    }
+    return indice_max;
+}
+
+void echanger(type tableau[], int i, int y)
+{
+    //permet d'échanger les valeurs de deux cases.
+
+    int tmp;
+
+    tmp = tableau[i].point;
+    tableau[i].point = tableau[y].point;
+    tableau[y].point = tmp;
+}
+
+void triSelection(type tableau[], int tailleTableau)
+{
+    int indice_max;
+
+    for(; tailleTableau > 1; tailleTableau--)           //On parcout le tableau en le réduisant de 1 à chaque passage
+    {
+        indice_max = max(tableau, tailleTableau);       //On cherche la plus grande valeur
+
+        echanger(tableau, tailleTableau-1, indice_max);  //On place cette valeur max en première position du tableau
+    }
+}
