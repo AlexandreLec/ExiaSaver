@@ -14,6 +14,7 @@
 //Functions prototypes
 FILE* chargeImg(FILE *descriptor, char *path, char *mode);
 void printHorizontal(char *l, size_t wei);
+void affichernbrcar(int repet, char caractere);
 
 
 int main (int argc, char *argv[])
@@ -90,21 +91,23 @@ while (1 == 1)
 
 	} //for
 
-//	char attente[255] = {"wait"};
+
+	char car = '.';
+	int nb = 0;
 	for (chrono = 10; chrono !=0; chrono--)
 	{
-		printf("cela va s\'actualiser dans %d seconde(s) \n", chrono);
+		char phrase[255] = {'\0'};
+		char test[255];
+		strcat(phrase, "cela va s'actualiser dans 10 secondes");
+		printf("%s ", phrase);
+		affichernbrcar(nb, car);
+		printf("\r");
 		sleep(1);
 	}
 
-/* marche
-	for(chrono = 10; chrono !=0; chrono--)
-	{
-		printf("cela va s'actualiser dans %d  seconde \n", chrono);
-		sleep(1);
-	}
-*/
 	fclose(dessin);
+
+
 }//while
 }//main
 
@@ -190,4 +193,12 @@ void center(int hMax, int *h)
 		printf("Image trop grande");
 	}
 
+}
+
+
+void affichernbrcar(int repet, char caractere)
+{
+int i;
+for(i=0; i<repet; i++)
+	printf("%c", caractere);
 }
