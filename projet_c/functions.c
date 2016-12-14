@@ -26,7 +26,7 @@ llist addStart(llist list, char *add)
 {
 	element *newElement = malloc(sizeof(element));
 	
-	strcpy(newElement->l,add);
+	strcpy(newElement->l,add);//copies the string pointed to, by src to dest.
 	newElement->next = list;
 	
 	return newElement;
@@ -80,14 +80,15 @@ void history(char* type, char* param)
 	free(lineHistory);	
 	
 }
-
+// use for have a random number
 int alea(int a, int b)
 {
-	srand(time(NULL));
+	srand(time(NULL));//seeds the random number generator used by the function rand.
 	int nb=rand()%b+a;
 	return nb;
 }
 
+//Used to select an image based on the random number. 
 char* picImg(char* pathImg)
 {
 	char *nameImg;
@@ -101,7 +102,7 @@ char* picImg(char* pathImg)
 	struct dirent *contenuRep;
 	DIR *rep;
 	
-	rep = opendir(pathImg);
+	rep = opendir(pathImg);//open a  directory
 	
 	if(rep == NULL)
 	{
@@ -130,7 +131,7 @@ char* picImg(char* pathImg)
 	
 	return nameImg;
 }
-
+//
 void start(char* nameExec, char* param)
 {
 	int pid=-1;
@@ -199,6 +200,8 @@ void triSelection(int tab[], int sizeTab)
 //			FUNCTIONS SAVER STATIC		   //
 //-----------------------------------------//
 
+
+//
 FILE* chargeFile(FILE *descriptor, char *path, char *mode)
 {
 	int pid;
@@ -231,6 +234,7 @@ FILE* chargeFile(FILE *descriptor, char *path, char *mode)
 	}
 }
 
+//Recovery of magic numbers for the size of the image
 void sizeImg(char *l, int *h, int *w)
 {
 	char *tmp;
@@ -244,6 +248,7 @@ void sizeImg(char *l, int *h, int *w)
 	*h = atoi(tmp);
 }
 
+//Function to center the image horizontally 
 void printHorizontal(char *l, size_t wei)
 {
 	size_t lenght = strlen(l);
@@ -259,9 +264,10 @@ void printHorizontal(char *l, size_t wei)
 	}
 	for(int y=0; y<=lenght; y++)
 	{
-		switch (l[y])
+		
+		switch (l[y])//Displays an ascii character based on the ascii code
 		{
-			case 48:
+			case 48://0
 				printf(" ");
 				break;
 				
@@ -275,14 +281,14 @@ void printHorizontal(char *l, size_t wei)
 		}
 	}
 }
-
+//Center vertically image
 void center(int hMax, int *h) 
 {
 	if(hMax >= *h)
 	{
 		int n = (hMax - *h)/2;
 		
-		for(int i=0; i<n; i++)
+		for(int i=0; i<n; i++)//Created a return to the line in order to descend on the ordinate
 		{
 			printf("\n");
 		}
