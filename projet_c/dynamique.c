@@ -11,9 +11,6 @@
 #define H_CONSOLE 24
 
 //Functions prototypes
-FILE* chargeImg(FILE *descriptor, char *path, char *mode);
-void printHorizontal(char *l, size_t wei);
-void affichernbrcar(int repet, char caractere);
 
 
 int main (int argc, char *argv[])
@@ -103,83 +100,3 @@ while (1 == 1)
 
 }//while
 }//main
-
-FILE* chargeImg(FILE *descriptor, char *path, char *mode) {
-	int pid;
-
-	pid = fork();
-
-	switch(pid)
-	{
-		case -1:
-			printf("Processus creation failed");
-			break;
-
-		case 0:
-			descriptor = fopen(path, mode);
-			break;
-		default:
-			wait(NULL);
-			break;
-
-	}
-
-	return descriptor;
-}
-
-void sizeImg(char *l, int *h, int *w) {
-	char *tmp;
-
-	tmp = strtok(l, " ");
-
-	*w = atoi(tmp);
-
-	tmp = strtok(NULL, " ");
-
-	*h = atoi(tmp);
-}
-
-void printHorizontal(char *l, size_t wei) {
-	size_t lenght = strlen(l);
-
-	if(wei >= lenght)
-	{
-		size_t n = (wei - lenght)/2;
-
-		for(size_t i=0; i<n;i++)
-		{
-			printf(" ");
-		}
-	}
-	for(int y=0; y<=lenght; y++)
-	{
-		int c = l[y];
-		switch (c)
-		{
-			case 48:
-				printf(" ");
-				break;
-
-			case 49:
-				printf("%c", 219);
-				break;
-		}
-	}
-}
-
-void center(int hMax, int *h) {
-	if(hMax >= *h)
-	{
-		int n = (hMax - *h)/2;
-
-		for(int i=0; i<n; i++)
-		{
-			printf("\n");
-		}
-	}
-	else
-	{
-		printf("Image trop grande");
-	}
-
-}
