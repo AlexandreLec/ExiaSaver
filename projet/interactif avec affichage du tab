@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct coordo coordo;
+struct coordo
+{
+	int A1;
+	int O1;
+
+};
+
+void fonction_Init( coordo* coordo);
+
+void fonctionAffichage(int tabConsole[]);
+
+
+
+
+
+int main(int argc, char* argv[]){
+
+
+
+    coordo avion_coordo;
+    coordo *pavion_coordo = &avion_coordo;
+	fonction_Init(pavion_coordo);
+	int tabConsole[5][5]={{0},{0}};
+	int x= pavion_coordo->A1;
+	int y = pavion_coordo->O1;
+	tabConsole[x][y]=1;
+	fonctionAffichage(*tabConsole);
+
+
+}
+
+
+
+void fonction_Init(coordo* coordo){
+
+        coordo->A1=2;
+        coordo->O1=2;
+
+}
+
+void fonctionAffichage(int tabConsole[])
+{
+
+	int i;
+	int j;
+
+	int compteur=0;
+	for(i=0; i<6 ; i++){
+		
+			for(j=0; j<6 ; j++){
+			
+				if(tabConsole[i*6+j]==0){
+					printf("O");
+					compteur=compteur+1;
+				}
+
+				if(tabConsole[i*6+j]==1){
+					printf("%c", 219);
+					compteur=compteur+1;
+				}
+
+
+				if(compteur==6){
+					printf("\n");
+					compteur=0;
+
+				}
+			} 
+	}
+}
