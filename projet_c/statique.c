@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/wait.h>
+
+#include "/home/alexandre/projet_c/functions.c"
+#include "/home/alexandre/projet_c/functions.h"
+
+//Size of the console 24 lines 80 columns
+#define W_CONSOLE 80
+#define H_CONSOLE 24
+
+
+int main(int argc, char *argv[])
+{
+	//Descriptor file
+	FILE* dessin = NULL;
+	
+	//Tab for bytes's line
+	char line[W_CONSOLE];
+	
+	//Number of lines in the file
+	int lineNb = 1;
+	//Image height	 
+	int hei = 0;
+	//Image weight
+	int wei = 0;
+	//Pointers on image size
+	int *phei = &hei;
+	int *pwei = &wei;
+
+	if (argc == 2)
+	{
+		//Remove all print on the console
+		system("clear");
+		
+		dessin = chargeFile(dessin, argv[1], "r");
+
+		//Reading the PBM file line per line and print it in the console
+
+		while((fgets(line, sizeof line, dessin)) != NULL)
+		{
+			if(lineNb == 2)
+			{
+				sizeImg(line, phei, pwei);
+				center(H_CONSOLE, phei);
+				lineNb++;
+			}
+				
+			if(lineNb > 2){
+				
+				printHorizontal(line, W_CONSOLE);
+				printf("\n");
+				lineNb++;	
+			}
+			else
+			{
+				lineNb++;
+			}
+			
+		}
+		center(H_CONSOLE, phei);
+		fclose(dessin);
+		
+	}
+	else
+	{
+		printf("Erreur d'argument");
+	}
+	
+	system("stty cbreak -echo");
+	getchar();
+	system("stty cooked echo");
+	system("clear");
+	
+	return 0;
+}
