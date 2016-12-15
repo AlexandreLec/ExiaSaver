@@ -1,11 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
-
 #include "/home/alexandre/projet_c/functions.c"
 #include "/home/alexandre/projet_c/functions.h"
 
@@ -40,18 +32,22 @@ int main(int argc, char *argv[])
 		dessin = chargeFile(dessin, argv[1], "r");
 
 		//Reading the PBM file line per line and print it in the console
-
 		while((fgets(line, sizeof line, dessin)) != NULL)
 		{
 			if(lineNb == 2)
 			{
+				//Find the sizes of the PBM
 				sizeImg(line, phei, pwei);
+				
+				//Center verticaly
 				center(H_CONSOLE, phei);
+				
 				lineNb++;
 			}
 				
 			if(lineNb > 2){
 				
+				//Center horiaontaly
 				printHorizontal(line, W_CONSOLE);
 				printf("\n");
 				lineNb++;	
@@ -63,6 +59,8 @@ int main(int argc, char *argv[])
 			
 		}
 		center(H_CONSOLE, phei);
+		
+		//Closing the file
 		fclose(dessin);
 		
 	}
@@ -71,6 +69,7 @@ int main(int argc, char *argv[])
 		printf("Erreur d'argument");
 	}
 	
+	//Freeze the screen until user type on a key
 	system("stty cbreak -echo");
 	getchar();
 	system("stty cooked echo");
