@@ -1,13 +1,13 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <string.h>
-#include <fcntl.h>
+#include <stdlib.h> //defines four variable types, several macros, and various functions for performing general functions
+#include <stdio.h> //defines three variable types, several macros, and various functions for performing input and output.
+#include <time.h> //four variable types, two macro and various functions for manipulating date and time.
+#include <dirent.h> //format of directory entries
+#include <sys/types.h> //data types
+#include <sys/stat.h> // data returned by the stat() function
+#include <sys/wait.h> //declarations for waiting
+#include <unistd.h> //standard symbolic constants and types
+#include <string.h> //defines one variable type, one macro, and various functions for manipulating arrays of characters.
+#include <fcntl.h> //file control options
 //All the functions of the ExiaSaver project are define in this file.
 
 //-----------------------------------------//
