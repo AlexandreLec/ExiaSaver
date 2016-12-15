@@ -1,13 +1,14 @@
-#include <stdlib.h> //defines four variable types, several macros, and various functions for performing general functions
-#include <stdio.h> //defines three variable types, several macros, and various functions for performing input and output.
-#include <time.h> //four variable types, two macro and various functions for manipulating date and time.
-#include <dirent.h> //format of directory entries
-#include <sys/types.h> //data types
-#include <sys/stat.h> // data returned by the stat() function
-#include <sys/wait.h> //declarations for waiting
-#include <unistd.h> //standard symbolic constants and types
-#include <string.h> //defines one variable type, one macro, and various functions for manipulating arrays of characters.
-#include <fcntl.h> //file control options
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+
 //All the functions of the ExiaSaver project are define in this file.
 
 //-----------------------------------------//
@@ -47,23 +48,31 @@ void history(char* type, char* param)
 {
 	printf("%s", param);
 	
+	//Struct for get informations about time
 	struct tm timeStart;
+	//Type time_t is define in library time.h
 	time_t sec;
 	
+	//Line that will be print in the history.txt file
 	char *lineHistory;
+	//Dynamic allocation
 	lineHistory = (char*)malloc(sizeof("DD/MM/YYYY HH:MM:SS typetypetype parametreparametre"));
 	
+	//Get information about localtime of the computer in the struct timeStart
 	sec = time(NULL);
 	timeStart = *localtime(&sec);
 	
+	//Time format in lineHistory
 	strftime(lineHistory, sizeof("DD/MM/YYYY HH:MM:SS"), "%d/%m/%Y %H:%M:%S", &timeStart);
-
+	
+	//Create lineHistory; add informations about time
 	strcat(lineHistory,type);
-
 	strcat(lineHistory,param);
 	
+	//OPenning history file
 	FILE* history = fopen("history.txt","a+");
 	
+	//Openning sucess
 	if(history != NULL)
 	{
 		fprintf(history,"%s\n", lineHistory);
@@ -76,10 +85,11 @@ void history(char* type, char* param)
 		printf("ERREUR");
 	}
 	
-	
+	//Free the memory
 	free(lineHistory);	
 	
 }
+
 // use for have a random number
 int alea(int a, int b)
 {
@@ -97,49 +107,61 @@ char* picImg(char* pathImg)
 	int nbImg=0;
 	int nbAlea=0;
 	
+	//Dynamic allocation of tabImg, tab of char*
 	tabImg = (char**)malloc(10*(sizeof(char*)));
 	
+	//Struct containing information about directory
 	struct dirent *contenuRep;
 	DIR *rep;
 	
-	rep = opendir(pathImg);//open a  directory
+	//open a  directory
+	rep = opendir(pathImg);
 	
 	if(rep == NULL)
 	{
 		printf("Openning rep failed");
 	}
 	
+	//Scan the repertory containing the PBM files
 	while((contenuRep = readdir(rep)) != NULL)
 	{
+		//Ignore the parent repertory and the current repertory
 		if(strcmp(contenuRep->d_name, ".") == 0 || strcmp(contenuRep->d_name, "..") == 0){}
 			
 		else
 		{
+			//Place names file in tabImg
 			tabImg[nbImg]=(contenuRep->d_name);
 			nbImg++;
 		}		
 	}
 	
-	
+	//Closing directory
 	closedir(rep);
 	
+	//Pic a random number
 	nbAlea = alea(0,nbImg);
 	
+	//Pic a PBM file random
 	nameImg = tabImg[nbAlea];
 	
+	//Free memory
 	free(tabImg);
 	
 	return nameImg;
 }
+
 //use for start a specific screensaver
 void start(char* nameExec, char* param)
 {
 	int pid=-1;
 	char* pathExec;
 	
+	//Get the path of the exec
 	pathExec = getenv("EXIASAVER_HOME");
 	strcat(pathExec, nameExec);
 	
+	//Create a processus
 	pid = fork();
 	
 	switch(pid)
@@ -196,12 +218,36 @@ void triSelection(int tab[], int sizeTab)
     }
 }
 
+void printHistory()
+{
+	system("clear");
+	FILE *f;
+	char line[200];
+	
+	//Opening file for reading
+	f = fopen("history.txt" , "r");
+	
+	if(f == NULL) 
+	{
+      perror("Error opening file");
+	}
+	
+	//Write the file on the console line per line
+	while((fgets(line, 200, f)) != NULL)
+	{	
+			printf("%s",line);
+	}
+	
+	//Closing file
+	fclose(f);
+}
+
 //-----------------------------------------//
 //			FUNCTIONS SAVER STATIC		   //
 //-----------------------------------------//
 
 
-//
+//Charge a file in a child processus
 FILE* chargeFile(FILE *descriptor, char *path, char *mode)
 {
 	int pid;
@@ -239,6 +285,7 @@ void sizeImg(char *l, int *h, int *w)
 {
 	char *tmp;
 	
+	//Cut the string
 	tmp = strtok(l, " ");
 	
 	*w = atoi(tmp);
@@ -251,6 +298,7 @@ void sizeImg(char *l, int *h, int *w)
 //Function to center the image horizontally 
 void printHorizontal(char *l, size_t wei)
 {
+	//Get the lenght of the string
 	size_t lenght = strlen(l);
 	
 	if(wei >= lenght)
@@ -299,3 +347,58 @@ void center(int hMax, int *h)
 	}
 	
 }
+//-----------------------------------------//
+//			FUNCTIONS SAVER INTERACTIF 	   //
+//-----------------------------------------// 
+
+//Struct containing the gravity center coordo of the plane
+typedef struct coordo coordo;
+struct coordo
+{
+	int A;	//abs, column
+	int O;	//ordo, line
+		
+};
+
+void positionInit(char *param, int *abs, int *ordo)
+{
+	char *tmp;
+	
+	//Separating param: aXb
+	tmp = strtok(param,"X");
+	
+	//a in ordo
+	*ordo = atoi(tmp);
+		
+	tmp = strtok(NULL,"X");
+	
+	//b in abs
+	*abs = atoi(tmp);
+}
+
+void fonction_Init(coordo* coordo, int li, int col)
+{
+	coordo->A=col;
+	coordo->O=li;	
+}
+
+void moveRight(coordo* coordo)
+{
+	coordo->A++;
+}
+
+void moveLeft(coordo* coordo)
+{
+	coordo->A--;
+}
+
+void moveDown(coordo* coordo)
+{
+	coordo->O++;
+}
+
+void moveUp(coordo* coordo)
+{
+	coordo->O--;
+}
+
