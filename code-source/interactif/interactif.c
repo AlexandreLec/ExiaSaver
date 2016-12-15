@@ -36,7 +36,8 @@ int main(int argc, char* argv[]){
 		
 		fonction_Init(pavion_coordo, ordo, abs);
 		
-		fonctionAffichage(tabConsole,pavion_coordo,"avion_b");
+		fonctionAffichage(tabConsole,pavion_coordo,"avion_d");
+		
 		printf("Commande ('x' pour sortir) :  ");
 	
 		//While char c is not x
@@ -97,56 +98,86 @@ void fonctionAffichage(int tabConsole[23][80], coordo* coordo, char *position)
 {
 	int i;
 	int j;
+	//Save the new coordo of the plane
 	int x = coordo->O;
 	int y = coordo->A;
 	
-	tabConsole[x][y]=1;
+	//tabConsole[x][y]=1;
 	
-	FILE *image;
+	FILE *image=NULL;
+	//path of the img
 	char* path;
-	char c;
+	//Char code in ascii for each byte of the PBM file
+	int c;
+	//Char in the PBM file
 	int carac = 0;
 	int cpt = 0;
-	char tmp[2];
 	
+	//Read the environnement variable
 	path=getenv("EXIASAVER3_PBM");
 	
+	//Buld the path
 	strcat(path,position);
 	strcat(path,".PBM");
 	
-	image = fopen("/home/alexandre/projet_c/interactif/avion_b.PBM", "r");
+	//Opening PBM file
+	image = fopen(path, "r");
 	
+	//Openning failed
+	if(image == NULL)
+	{
+		printf("erreur");
+		sleep(1);
+	}
+	
+	//Read the file char per char
 	while((c=fgetc(image)) != EOF)
 	{
-		if(carac < 6)
-		{
-			carac++;
-		}
-		if(carac > 5)
-		{
-			sprintf(tmp,"%c",c);
-			tabConsole[x][y] = atoi(tmp);
-			printf("%d", tabConsole[x][y]);
 			
-			if(cpt < 6)
-			{
-				x++;
-				cpt++;
+			if(carac > 6)
+			{	
+				//Complete the area plane tab with the PBM's bytes
+				switch(c)
+				{
+					case 48:
+						tabConsole[x][y] = 0;
+						break;
+					case 49:
+						tabConsole[x][y] = 1;
+						break;
+					default:
+						break;
+				}
+				
+				if(cpt > 5)
+				{
+					x++;
+					y=coordo->A;
+					cpt=0;
+				}
+			
+				else
+				{
+					y++;
+					cpt++;
+				}
+					
 			}
 			else
 			{
-				y++;
-				cpt = 0;
-			}
-		}
+				carac++;
+			}		
 	}
 	
+	//Close the file
 	fclose(image);
 	
-	/*for(i = 0;i<23;i++)
+	//Print the tab into the console
+	for(i = 0;i<23;i++)
 	{
 		for(j=0;j<80;j++)
 		{
+			
 			if(tabConsole[i][j] == 1)
 			{
 				printf("%c",219);
@@ -155,7 +186,7 @@ void fonctionAffichage(int tabConsole[23][80], coordo* coordo, char *position)
 			{
 				printf(" ");
 			}
+		
 		}
 	}
-	tabConsole[x][y]=0;*/
 }
