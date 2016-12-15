@@ -131,7 +131,7 @@ char* picImg(char* pathImg)
 	
 	return nameImg;
 }
-//
+//use for start a specific screensaver
 void start(char* nameExec, char* param)
 {
 	int pid=-1;
@@ -148,7 +148,7 @@ void start(char* nameExec, char* param)
 			printf("Processus creation failed");
 			break;
 		case 0:
-			execl(pathExec,nameExec,param,(char*)NULL);
+			execl(pathExec,nameExec,param,(char*)NULL); //run the program
 			break;
 		default:
 			wait(NULL);
