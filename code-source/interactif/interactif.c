@@ -7,7 +7,7 @@
 
 
 //Print the area's plane
-void fonctionAffichage(int tabConsole[23][80], coordo* coordo, char *position);
+void fonctionAffichage(int tabConsole[23][80], coordo* coordo, int position);
 
 
 int main(int argc, char* argv[]){
@@ -20,6 +20,8 @@ int main(int argc, char* argv[]){
 		//Definition of initial position of the gravity center
 		int ordo=0;
 		int abs=0;	
+		
+		int pos=0;
 		
 		int *pOrdo = &ordo;
 		int *pAbs = &abs;
@@ -36,8 +38,8 @@ int main(int argc, char* argv[]){
 		
 		fonction_Init(pavion_coordo, ordo, abs);
 		
-		fonctionAffichage(tabConsole,pavion_coordo,"avion_d");
-		
+		fonctionAffichage(tabConsole,pavion_coordo,pos);
+
 		printf("Commande ('x' pour sortir) :  ");
 	
 		//While char c is not x
@@ -48,31 +50,38 @@ int main(int argc, char* argv[]){
 				//User press d
 				case 100:
 					moveRight(pavion_coordo);
+					pos=1;
 					break;
 				//User press q
 				case 113:
 					moveLeft(pavion_coordo);
+					pos=3;
 					break;
 				//User press z
 				case 122:
 					moveUp(pavion_coordo);
+					pos=0;
 					break;
 				//User press s 
 				case 115:
 					moveDown(pavion_coordo);
+					pos=2;
 					break;
 				//User press g
 				case 103:
 					moveLeft(pavion_coordo);
+					pos=3;
 					break;
 				//User press h
 				case 104:
 					moveUp(pavion_coordo);
+					pos=0;
 					break;
 				
 				//User press b
 				case 98:
 					moveDown(pavion_coordo);
+					pos=2;
 					break;
 		
 			}
@@ -80,7 +89,7 @@ int main(int argc, char* argv[]){
 			system("clear");
 			
 			//Print plane to it new position
-			fonctionAffichage(tabConsole,pavion_coordo,"avion_b");
+			fonctionAffichage(tabConsole,pavion_coordo,pos);
 			
 			printf("Commande ('x' pour sortir) : ");
 		}
@@ -94,7 +103,7 @@ int main(int argc, char* argv[]){
 }
 
 
-void fonctionAffichage(int tabConsole[23][80], coordo* coordo, char *position)
+void fonctionAffichage(int tabConsole[23][80], coordo* coordo, int position)
 {
 	int i;
 	int j;
@@ -102,75 +111,94 @@ void fonctionAffichage(int tabConsole[23][80], coordo* coordo, char *position)
 	int x = coordo->O;
 	int y = coordo->A;
 	
-	//tabConsole[x][y]=1;
+	//Reinitialization of the plane area
+	for(i = 0;i<23;i++)
+	{
+		for(j=0;j<80;j++)
+		{
+			
+			tabConsole[i][j] = 0;
+
+		}
+	}
 	
-	FILE *image=NULL;
-	//path of the img
-	char* path;
 	//Char code in ascii for each byte of the PBM file
-	int c;
+	int c=0;
 	//Char in the PBM file
 	int carac = 0;
 	int cpt = 0;
 	
-	//Read the environnement variable
-	path=getenv("EXIASAVER3_PBM");
-	
-	//Buld the path
-	strcat(path,position);
-	strcat(path,".PBM");
-	
 	//Opening PBM file
-	image = fopen(path, "r");
+	FILE *image;
 	
-	//Openning failed
-	if(image == NULL)
+	//Choose the PBM file
+	if(position == 0)
 	{
-		printf("erreur");
-		sleep(1);
+		image = fopen("/home/alexandre/projet_c/interactif/PBM/avion_h.PBM", "r");
+	}
+	if(position == 1)
+	{
+		image = fopen("/home/alexandre/projet_c/interactif/PBM/avion_d.PBM", "r");
+	}
+	if(position == 2)
+	{
+		image = fopen("/home/alexandre/projet_c/interactif/PBM/avion_b.PBM", "r");
+	}
+	if(position == 3)
+	{
+		image = fopen("/home/alexandre/projet_c/interactif/PBM/avion_g.PBM", "r");
 	}
 	
-	//Read the file char per char
-	while((c=fgetc(image)) != EOF)
+	if(image != NULL)
 	{
+		//Read the file char per char
+		while((c=fgetc(image)) != EOF)
+		{
 			
-			if(carac > 6)
-			{	
-				//Complete the area plane tab with the PBM's bytes
-				switch(c)
-				{
-					case 48:
-						tabConsole[x][y] = 0;
-						break;
-					case 49:
-						tabConsole[x][y] = 1;
-						break;
-					default:
-						break;
-				}
+				if(carac > 6)
+				{	
+					//Complete the area plane tab with the PBM's bytes
+					switch(c)
+					{
+						case 48:
+							tabConsole[x][y] = 0;
+							break;
+						case 49:
+							tabConsole[x][y] = 1;
+							break;
+						default:
+							break;
+					}
 				
-				if(cpt > 5)
-				{
-					x++;
-					y=coordo->A;
-					cpt=0;
-				}
+					if(cpt > 5)
+					{
+						x++;
+						y=coordo->A;
+						cpt=0;
+					}
 			
+					else
+					{
+						y++;
+						cpt++;
+					}
+					carac++;
+					
+				}
 				else
 				{
-					y++;
-					cpt++;
-				}
-					
-			}
-			else
-			{
-				carac++;
-			}		
-	}
+					carac++;
+				}		
+		}
 	
 	//Close the file
 	fclose(image);
+	
+	}
+	else 
+	{
+		sleep(5);
+	}
 	
 	//Print the tab into the console
 	for(i = 0;i<23;i++)
